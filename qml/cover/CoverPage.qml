@@ -33,6 +33,9 @@ import Sailfish.Silica 1.0
 
 CoverBackground
 {
+    signal enableTether();
+    signal disableTether();
+
     Image
     {
         anchors.centerIn: parent
@@ -42,24 +45,39 @@ CoverBackground
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.bottom
             anchors.topMargin: 10
-            text: "WiFi Tether"
+            text: "Hotspot"
             font.bold: true
         }
     }
 
     CoverActionList
     {
-        id: coverAction
+        id: canbeenabled
+        enabled: (ssidOk && passPhraseOk)
 
         CoverAction
         {
             iconSource: "image://theme/icon-cover-play"
+            onTriggered: enableTether()
         }
 
         CoverAction {
             iconSource: "image://theme/icon-cover-cancel"
+            onTriggered: disableTether()
         }
     }
+
+    CoverActionList
+    {
+        id: juststop
+        enabled: !(ssidOk && passPhraseOk)
+
+        CoverAction {
+            iconSource: "image://theme/icon-cover-cancel"
+            onTriggered: disableTether()
+        }
+    }
+
 }
 
 

@@ -5,7 +5,11 @@ import tether.Tethering 1.0
 
 Page
 {
-    id: page
+    id: wifiTether
+
+    property alias passPhraseOk : passphrase.acceptableInput
+    property alias ssidOk : ssid.acceptableInput
+
 
     SilicaFlickable {
         anchors.fill: parent
@@ -15,7 +19,7 @@ Page
         {
             id: column
 
-            width: page.width
+            width: wifiTether.width
             spacing: Theme.paddingLarge
             PageHeader
             {
@@ -32,11 +36,8 @@ Page
                 font.pixelSize: Theme.fontSizeLarge
                 horizontalAlignment: TextInput.AlignHCenter
                 inputMethodHints: Qt.ImhPreferLowercase | Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
-                EnterKey.onClicked:
-                {
-                    ssid.focus = false
-                }
-
+                validator: RegExpValidator { regExp: /^[a-zA-Z0-9]{3,}$/ }
+                EnterKey.onClicked: ssid.focus = false
             }
 
             TextField
@@ -48,16 +49,13 @@ Page
                 font.pixelSize: Theme.fontSizeLarge
                 horizontalAlignment: TextInput.AlignHCenter
                 inputMethodHints: Qt.ImhPreferLowercase | Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
-                EnterKey.onClicked:
-                {
-                    passphrase.focus = false
-                }
-
+                validator: RegExpValidator { regExp: /^[a-zA-Z0-9]{8,}$/ }
+                EnterKey.onClicked: passphrase.focus = false
             }
 
             Button
             {
-                text: "Generate passpharse"
+                text: "Generate passphrase"
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: tether.generatePassPhrase()
             }
@@ -65,14 +63,15 @@ Page
             Button
             {
                 text: "Enable"
+                enabled: ssidOk && passPhraseOk
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: tether.enableTethering(ssid.text, passphrase.text)
+                onClicked: enableTether()
             }
             Button
             {
                 text: "Disable"
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: tether.disableTethering()
+                onClicked: disableTether()
             }
 
         }
@@ -81,6 +80,17 @@ Page
     {
         id: tether
         onPassPhraseChanged: passphrase.text = tether.passPhrase
+    }
+
+    function enableTether()
+    {
+        if (ssidOk && passPhraseOk)
+            tether.enableTethering(ssid.text, passphrase.text)
+    }
+
+    function disableTether()
+    {
+        tether.disableTethering()
     }
 }
 

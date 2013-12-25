@@ -24,3 +24,6 @@ OTHER_FILES += qml/tether.qml \
 HEADERS += \
     src/tethering.h
 
+RESOURCES +=
+
+

@@ -6,21 +6,27 @@ import "cover"
 ApplicationWindow
 {
 
-    property alias passPhraseOk : wifiTether.passPhraseOk
-    property alias ssidOk : wifiTether.ssidOk
-
     initialPage: WifiTether
     {
         id: wifiTether
     }
 
-    cover: Qt.resolvedUrl( "cover/CoverPage.qml" )
+    //cover: Qt.resolvedUrl( "cover/CoverPage.qml" )
+    cover: CoverPage
+    {
+        id: cover
+    }
+
+    property alias passPhraseOk : wifiTether.passPhraseOk
+    property alias ssidOk : wifiTether.ssidOk
+    property alias isWlan: wifiTether.isWlan
+    property alias ssidName : wifiTether.ssidName
 
     Connections
     {
-        target: coverpage
-        onEnableTether: WifiTether.enableTether()
-        onDisableTether: WifiTether.disableTether()
+        target: cover
+        onEnableTether: wifiTether.enableTether()
+        onDisableTether: wifiTether.disableTether()
     }
 }
 

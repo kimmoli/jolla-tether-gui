@@ -33,27 +33,38 @@ import Sailfish.Silica 1.0
 
 CoverBackground
 {
+    id: cover
     signal enableTether();
     signal disableTether();
 
     Image
     {
-        anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: 90
         source: "../tether.png"
         Label
         {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.bottom
-            anchors.topMargin: 10
+            anchors.topMargin: 12
             text: "Hotspot"
             font.bold: true
         }
+        Label
+        {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.bottom
+            anchors.topMargin: 48
+            text: ssidName
+            font.bold: false
+        }
+
     }
 
     CoverActionList
     {
         id: canbeenabled
-        enabled: (ssidOk && passPhraseOk)
+        enabled: (ssidOk && passPhraseOk && !isWlan)
 
         CoverAction
         {
